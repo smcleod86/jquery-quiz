@@ -1,26 +1,23 @@
 //Variables
 const NEXTBTN = $('#next')
-const SUBMITBTN = $('#submit')
 const PROMPT = $('#prompt')
 const QUIZCONTAINER = $('#quiz')
 const RESULTSCONTAINER = $('#results')
 const START = $('#start')
-
 const ANSWERCHOICEONE = $('#a1')
 const ANSWERCHOICETWO = $('#a2')
 const ANSWERCHOICETHREE = $('#a3')
 const ANSWERCHOICEFOUR = $('#a4')
 const RADIOTRUE = $('.guess')
-
 let userAns = []
 let score = 0
 let questionNumber = 0
-
+​
 const questions = [{
     prompt: "How many feet should you remain from another individaul during our current covid-19 outbreak?",
     answers: ["10 inches", "2 feet", "6 feet", "25 feet"],
     correctAnswerIndex: 2
-  }, 
+  },
   {
     prompt: "What weights more, 3 tons of gravel, or 3 tons of feathers?",
     answers: ["They weigh the same", "Feathers", "Gravel", "Dancing Banana"],
@@ -41,60 +38,60 @@ const questions = [{
     answers: ["3 quarts", "8 quarts", "A large handful", "10"],
     correctAnswerIndex: 1
   }];
-  
+​
   //Functions
   const startQuiz = () => {
     PROMPT.text(questions[0].prompt)
-    
+​
     ANSWERCHOICEONE.next().text(questions[0].answers[0])
     ANSWERCHOICETWO.next().text(questions[0].answers[1])
     ANSWERCHOICETHREE.next().text(questions[0].answers[2])
     ANSWERCHOICEFOUR.next().text(questions[0].answers[3])
-    
-    NEXTBTN.click(nextQuestion)  
+​
+    NEXTBTN.click(nextQuestion)
   }
-  
+​
   const nextQuestion = () => {
-    
-    userAns.push($('input[name=radio]:checked', '#form').val())
-    if (RADIOTRUE !== true) {
-      RESULTSCONTAINER.text("Make a selection")}
-      else (RADIOTRUE === true) 
-    questionNumber++
-    PROMPT.text(questions[questionNumber].prompt)
-    ANSWERCHOICEONE.next().text(questions[questionNumber].answers[0])
-    ANSWERCHOICETWO.next().text(questions[questionNumber].answers[1])
-    ANSWERCHOICETHREE.next().text(questions[questionNumber].answers[2])
-    ANSWERCHOICEFOUR.next().text(questions[questionNumber].answers[3])
-    
-    radioClear()
-  }
-  
-  const radioClear = () => {
-    for (let i = 0; i < RADIOTRUE.length; i++) {
-     
-          if(RADIOTRUE[i] == questions[i].correctAnswerIndex){
-            score++
-            console.log('score', score)
-          }
-
-        RADIOTRUE[i].checked = false
+    if (questionNumber < questions.length - 1) {
+      userAns.push(Number($('input[name=radio]:checked')[0].id[1]))
+      if ($('input[name=radio]:checked').length) {
+        questionNumber++
+        PROMPT.text(questions[questionNumber].prompt)
+        ANSWERCHOICEONE.next().text(questions[questionNumber].answers[0])
+        ANSWERCHOICETWO.next().text(questions[questionNumber].answers[1])
+        ANSWERCHOICETHREE.next().text(questions[questionNumber].answers[2])
+        ANSWERCHOICEFOUR.next().text(questions[questionNumber].answers[3])
+​
+        radioClear()
+      }
+      else {
+        RESULTSCONTAINER.text("Make a selection")
       }
     }
-    console.log(questions[0].correctAnswerIndex)
-    
+    else {
+      submission()
+    }
+  }
+​
+  const radioClear = () => {
+    for (let i = 0; i < RADIOTRUE.length; i++) {
+      if(RADIOTRUE[i] == questions[i].correctAnswerIndex) {
+        score++
+        console.log('score', score)
+      }
+      RADIOTRUE[i].checked = false
+    }
+  }
+​
  const submission = () => {
     for (let i = 0; i < userAns.length; i++) {
-          if (userAns[i] !== questions(correctAnswerIndex[i])) {
-//           break; 
-//           }
-//             else {
-//           score++
-         }
-       }
+      if (userAns[i] == (questions[i].correctAnswerIndex + 1)) {
+        score++
+      }
+    }
+    console.log("Your score was " + score + " of " + questions.length)
+    //  TODO: display the score in the DOM
   }
-    //  display(score)
-    
- START.click(startQuiz)
-//Submit is not logging
-SUBMITBTN.click(submission)
+​
+START.click(startQuiz)
+​
